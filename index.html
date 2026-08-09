@@ -1,11 +1,40 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Sample Webpage</title>
-    <!-- Link to an external CSS stylesheet (optional) -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Google Sheet Data</title>
 </head>
-    <h1>Vipin Tyagi The Great Enginner</h1>
 <body>
+
+  <h2>Google Sheet Data</h2>
+  <div id="data-container">Loading...</div>
+
+  <script>
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1xc8wKpGaKqsiNNNo-5TGRCRJJGjhbw1Ua7V9uXBRWuw/edit?pli=1&gid=0#gid=0';
+
+    fetch(sheetUrl)
+      .then(response => response.text())
+      .then(csvText => {
+        const rows = csvText.split('\n').map(row => row.split(','));
+        
+        // Build a simple HTML table
+        let tableHtml = '<table border="1">';
+        rows.forEach(row => {
+          tableHtml += '<tr>';
+          row.forEach(cell => {
+            tableHtml += `<td>${cell.trim()}</td>`;
+          });
+          tableHtml += '</tr>';
+        });
+        tableHtml += '</table>';
+
+        document.getElementById('data-container').innerHTML = tableHtml;
+      })
+      .catch(error => {
+        console.error('Error fetching sheet:', error);
+        document.getElementById('data-container').innerText = 'Failed to load data.';
+      });
+  </script>
+
+</body>
+</html>
+
